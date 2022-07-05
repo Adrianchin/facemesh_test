@@ -1,5 +1,5 @@
 // Triangulation Metrics
-export const TRIANGULATION = [
+export const TRIANGULATION = [ // Ordered pair in 3x for rendering
     127,
     34,
     139,
@@ -2642,7 +2642,7 @@ export const TRIANGULATION = [
     255,
   ];
   
-  // Triangle drawing method
+  // Triangle drawing 
   const drawPath = (ctx, points, closePath) => {
     const region = new Path2D();
     region.moveTo(points[0].x, points[0].y);
@@ -2659,15 +2659,14 @@ export const TRIANGULATION = [
   };
   
   // Drawing Mesh
-  export const drawMesh = (predictions, ctx) => {
+  export const drawMesh = (face, ctx) => {
     
     //console.log(predictions)
-    if (predictions.keypoints.length > 0) {
-        const keypoints = predictions.keypoints
+    if (face.keypoints.length > 0) {
+        const keypoints = face.keypoints
         //  Draw Triangles
-
         for (let i = 0; i < TRIANGULATION.length / 3; i++) {
-          // Get sets of three keypoints for the triangle
+          // Get sets of three nodes for each triangle
           const points = [
             TRIANGULATION[i * 3],
             TRIANGULATION[i * 3 + 1],
@@ -2687,6 +2686,5 @@ export const TRIANGULATION = [
           ctx.fillStyle = "grey";
           ctx.fill();
         }
-
     }
   };

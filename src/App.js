@@ -4,9 +4,9 @@ import * as tf from "@tensorflow/tfjs"
 //import * as facemesh from "@tensorflow-models/facemesh" 
 import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection" 
 
+//Added as per TF api suggestions
 import '@mediapipe/face_mesh';
 import '@tensorflow/tfjs-core';
-// Register WebGL backend.
 import '@tensorflow/tfjs-backend-webgl';
 
 import Webcam from "react-webcam"
@@ -19,18 +19,18 @@ const canvasRef = useRef(null)
 
 //Load Facemesh
 const runFacemesh = async () =>{
-const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
-const detectorConfig = {
+const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh; //Create model
+const detectorConfig = {//Config
   runtime: 'tfjs',
 };
-const net = await faceLandmarksDetection.createDetector(model, detectorConfig);
+const nodes = await faceLandmarksDetection.createDetector(model, detectorConfig);
   setInterval(() => {
-    detect(net);
+    detect(nodes);
   }, 10);
 }
 
 //Detech function
-const detect = async (net) => {
+const detect = async (nodes) => {
   if(typeof webcamRef.current !== "undefined" &&
   webcamRef.current !== null &&
   webcamRef.current.video.readyState === 4){// Checking cam is not unfefined or null and it is recieving data (readState === 4)
@@ -48,10 +48,8 @@ const detect = async (net) => {
     canvasRef.current.height = videoHeight;
 
     //Make detections
-    //const face = await net.estimateFaces(video);
     const estimationConfig = {flipHorizontal: false};
-    const face = await net.estimateFaces(video,estimationConfig);
-    console.log("Face: ",face)
+    const face = await nodes.estimateFaces(video,estimationConfig);
     
     //Get canvas context for drawing
     const ctx = canvasRef.current.getContext("2d");
