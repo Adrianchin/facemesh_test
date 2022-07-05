@@ -19,32 +19,16 @@ const canvasRef = useRef(null)
 
 //Load Facemesh
 const runFacemesh = async () =>{
-  /*
-  const net = await facemesh.load({
-    inputResolution:{width:640, height:48}, scale:0.8
-  });
-  setInterval(()=>{
-    detect(net)
-  }, 100)
-}
-  */
 const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
 const detectorConfig = {
-  runtime: 'mediapipe',
-  solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
+  runtime: 'tfjs',
 };
 const net = await faceLandmarksDetection.createDetector(model, detectorConfig);
   setInterval(() => {
     detect(net);
   }, 10);
 }
-  /*
-  const net = await facemesh.load(facemesh.SupportedPackages.mediapipeFacemesh);
-    setInterval(() => {
-      detect(net);
-    }, 10);
-  };
-*/
+
 //Detech function
 const detect = async (net) => {
   if(typeof webcamRef.current !== "undefined" &&
@@ -56,12 +40,12 @@ const detect = async (net) => {
     const videoHeight = webcamRef.current.video.videoHeight;
 
     //Set video widths
-    webcamRef.current.video.width=videoWidth
-    webcamRef.current.video.height=videoHeight
+    webcamRef.current.video.width=videoWidth;
+    webcamRef.current.video.height=videoHeight;
 
     //Set canvas witdh
-    canvasRef.current.width = videoWidth
-    canvasRef.current.videoHeight = videoHeight
+    canvasRef.current.width = videoWidth;
+    canvasRef.current.height = videoHeight;
 
     //Make detections
     //const face = await net.estimateFaces(video);
@@ -70,9 +54,8 @@ const detect = async (net) => {
     console.log("Face: ",face)
     
     //Get canvas context for drawing
-    //const ctx = canvasRef.current.getContext("2d");
-    //console.log("canvasRef: ",ctx)
-    //requestAnimationFrame(async () => {drawMesh(face, ctx)});
+    const ctx = canvasRef.current.getContext("2d");
+    requestAnimationFrame(() => {drawMesh(face[0], ctx)});
   }
 }
 
